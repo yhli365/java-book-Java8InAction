@@ -3,6 +3,7 @@ package lambdasinaction.chap2;
 public class MeaningOfThis {
 	public final int value = 4;
 
+	@SuppressWarnings("unused")
 	public void doIt() {
 		int value = 6;
 		Runnable r = new Runnable() {
