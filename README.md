@@ -3,9 +3,7 @@ Java8InAction
 
 This repository contains all the source code for the examples and quizzes in the book Java 8 in Action: Lambdas, Streams and functional-style programming.
 
-You can purchase the early access here: [http://manning.com/urma/](http://manning.com/urma/)
-
-We are very keen to hear your feedback and improve the book based on your comments!
+You can purchase the book here: [http://manning.com/urma/](http://manning.com/urma/) or on Amazon
 
 The source code for all examples can be found in the directory [src/main/java/lambdasinaction](https://github.com/java8/Java8InAction/tree/master/src/main/java/lambdasinaction)
 
@@ -54,3 +52,8 @@ $ java lambdasinaction/chap1/FilteringApples
 
 
 Alternatively you can compile the files manually inside the directory src/main/java
+
+You can also import the project in your favorite IDE:
+    * In IntelliJ use "File->Open" menu and navigate to the folder where the project resides
+    * In Eclipse use "File->Import->Existing Maven Projects" (also modify "Reduntant super interfaces" to report as Warnings instead of Errors
+    * In Netbeans use "File->Open Project" menu
