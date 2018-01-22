@@ -1,10 +1,6 @@
 package lambdasinaction.chap3;
 
 import static java.util.Comparator.comparing;
-import static lambdasinaction.AppendUtils.filter;
-import static lambdasinaction.AppendUtils.inventory;
-import static lambdasinaction.AppendUtils.map;
-import static lambdasinaction.AppendUtils.title;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,17 +12,15 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
-import lambdasinaction.AppendUtils;
-import lambdasinaction.AppendUtils.AppendTest;
-import lambdasinaction.AppendUtils.Apple;
+import lambdasinaction.AppendTest;
 
-public class Append {
+public class Append extends AppendTest {
 
 	public static void main(String... args) {
-		AppendUtils.test(Append.class);
+		test(Append.class);
 	}
 
-	@AppendTest(4)
+	@Test(4)
 	public static class UsingFunctionalInterfaces {
 
 		public static void test() {
@@ -77,7 +71,7 @@ public class Append {
 
 	}
 
-	@AppendTest(8)
+	@Test(8)
 	public static class UsefulMethodsToComposeLambdaExpressions {
 
 		public void testComparator() {
@@ -148,7 +142,7 @@ public class Append {
 
 	}
 
-	@AppendTest(9)
+	@Test(9)
 	public static class SimilarIdeasFromMathematics {
 
 		public void testIntegrate() {

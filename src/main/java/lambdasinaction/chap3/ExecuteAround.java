@@ -3,7 +3,7 @@ package lambdasinaction.chap3;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import lambdasinaction.AppendUtils;
+import lambdasinaction.AppendTest;
 
 public class ExecuteAround {
 
@@ -24,13 +24,13 @@ public class ExecuteAround {
 	}
 
 	public static String processFileLimited() throws IOException {
-		try (BufferedReader br = new BufferedReader(AppendUtils.getReader("lambdasinaction/chap3/data.txt"))) {
+		try (BufferedReader br = new BufferedReader(AppendTest.getReader("lambdasinaction/chap3/data.txt"))) {
 			return br.readLine();
 		}
 	}
 
 	public static String processFile(BufferedReaderProcessor p) throws IOException {
-		try (BufferedReader br = new BufferedReader(AppendUtils.getReader("lambdasinaction/chap3/data.txt"))) {
+		try (BufferedReader br = new BufferedReader(AppendTest.getReader("lambdasinaction/chap3/data.txt"))) {
 			return p.process(br);
 		}
 
