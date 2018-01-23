@@ -24,7 +24,7 @@ public class PartitionPrimeNumbers {
 	public static void main(String... args) {
 		System.out.println("Numbers partitioned in prime and non-prime: " + partitionPrimes(100));
 		System.out.println("Numbers partitioned in prime and non-prime: " + partitionPrimesWithCustomCollector(100));
-
+		System.out.println("Numbers partitioned in prime and non-prime: " + partitionPrimesWithInlineCollector(100));
 	}
 
 	public static Map<Boolean, List<Integer>> partitionPrimes(int n) {
@@ -61,6 +61,7 @@ public class PartitionPrimeNumbers {
 	public static class PrimeNumbersCollector
 			implements Collector<Integer, Map<Boolean, List<Integer>>, Map<Boolean, List<Integer>>> {
 
+		@SuppressWarnings("serial")
 		@Override
 		public Supplier<Map<Boolean, List<Integer>>> supplier() {
 			return () -> new HashMap<Boolean, List<Integer>>() {
@@ -98,17 +99,20 @@ public class PartitionPrimeNumbers {
 		}
 	}
 
-	public Map<Boolean, List<Integer>> partitionPrimesWithInlineCollector(int n) {
-		return Stream.iterate(2, i -> i + 1).limit(n).collect(() -> new HashMap<Boolean, List<Integer>>() {
-			{
-				put(true, new ArrayList<Integer>());
-				put(false, new ArrayList<Integer>());
-			}
-		}, (acc, candidate) -> {
-			acc.get(isPrime(acc.get(true), candidate)).add(candidate);
-		}, (map1, map2) -> {
-			map1.get(true).addAll(map2.get(true));
-			map1.get(false).addAll(map2.get(false));
-		});
+	@SuppressWarnings("serial")
+	public static Map<Boolean, List<Integer>> partitionPrimesWithInlineCollector(int n) {
+		// return IntStream.rangeClosed(2, n).boxed() //
+		return Stream.iterate(2, i -> i + 1).limit(n - 1) //
+				.collect(() -> new HashMap<Boolean, List<Integer>>() {
+					{
+						put(true, new ArrayList<Integer>());
+						put(false, new ArrayList<Integer>());
+					}
+				}, (acc, candidate) -> {
+					acc.get(isPrime(acc.get(true), candidate)).add(candidate);
+				}, (map1, map2) -> {
+					map1.get(true).addAll(map2.get(true));
+					map1.get(false).addAll(map2.get(false));
+				});
 	}
 }

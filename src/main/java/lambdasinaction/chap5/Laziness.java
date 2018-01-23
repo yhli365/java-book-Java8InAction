@@ -19,7 +19,8 @@ public class Laziness {
 			System.out.println("mapping " + n);
 			return n * n;
 		}).limit(2).collect(toList());
-
+		System.out.println("numbers: " + numbers);
+		System.out.println("twoEvenSquares: " + twoEvenSquares);
 	}
 
 }
