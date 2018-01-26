@@ -10,23 +10,53 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AppendTest {
+	protected static java.util.logging.Logger logger = java.util.logging.Logger.getLogger("AppendTest");
 
 	private static boolean titleFirst;
+
+	static {
+		// Logger settings
+		java.util.logging.ConsoleHandler handler = new java.util.logging.ConsoleHandler();
+		handler.setLevel(java.util.logging.Level.ALL);
+		logger.setUseParentHandlers(false);
+		logger.addHandler(handler);
+		logger.setLevel(java.util.logging.Level.ALL);
+	}
+
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace(System.err);
+		}
+	}
+
+	public static void sleep(long duration, TimeUnit unit) {
+		try {
+			Thread.sleep(unit.toMillis(duration));
+		} catch (InterruptedException e) {
+			e.printStackTrace(System.err);
+		}
+	}
 
 	public final static void test(Class<?> clazz) {
 		System.out.println(clazz.getName());
 		List<Object[]> tests = new ArrayList<>();
+		tests.add(new Object[] { clazz, -1 });
 		Class<?> innerClazz[] = clazz.getDeclaredClasses();
 		for (Class<?> cls : innerClazz) {
 			Test at = cls.getAnnotation(Test.class);
@@ -38,24 +68,25 @@ public class AppendTest {
 		tests.sort(comparing(a -> (int) a[1]));
 		for (Object[] t : tests) {
 			Class<?> cls = (Class<?>) t[0];
-			System.out.println("\n\033[31m=====" + cls.getSimpleName() + "=====\033[0m");
 			// Method method = cls.getMethod("test");
 			Object obj = null;
 			boolean first = true;
 			for (Method method : cls.getMethods()) {
-				if (!method.getName().startsWith("test") || method.getParameterTypes().length != 0) {
+				Test at = method.getAnnotation(Test.class);
+				if (method.getParameterTypes().length != 0 || (at == null && !method.getName().startsWith("test"))) {
 					continue;
 				}
 				try {
-					Test at = method.getAnnotation(Test.class);
 					String desc = (at == null || at.desc().trim().length() == 0) ? method.getName()
 							: method.getName() + ":" + at.desc().trim();
 					if (first) {
+						System.out.println("\n\033[31m=====" + cls.getSimpleName() + "=====\033[0m");
 						System.out.println("\033[32m-----[" + desc + "]----------\033[0m");
 					} else {
 						System.out.println("\n\033[32m-----[" + desc + "]----------\033[0m");
 					}
 					titleFirst = true;
+					first = false;
 					int modifiers = method.getModifiers();
 					if (Modifier.isStatic(modifiers)) {
 						method.invoke(null);
@@ -65,7 +96,8 @@ public class AppendTest {
 						}
 						method.invoke(obj);
 					}
-					first = false;
+				} catch (InvocationTargetException e) {
+					e.getCause().printStackTrace(System.out);
 				} catch (Exception e) {
 					e.printStackTrace(System.out);
 				}
@@ -138,14 +170,12 @@ public class AppendTest {
 		String desc() default "";
 	}
 
-	public static List<Apple> inventory = new ArrayList<Apple>();
-
-	static {
-		inventory.add(new Apple(80, "green", "US"));
-		inventory.add(new Apple(155, "green", "China"));
-		inventory.add(new Apple(190, "red", "US"));
-		inventory.add(new Apple(80, "red", "China"));
-	}
+	public static List<Apple> inventory = Arrays.asList( //
+			new Apple(80, "green", "US"), //
+			new Apple(155, "green", "China"), //
+			new Apple(190, "red", "US"), //
+			new Apple(80, "red", "China") //
+	);
 
 	public static class Apple {
 		private int weight = 0;
@@ -193,6 +223,59 @@ public class AppendTest {
 				return "Apple{'" + color + "', " + weight + ", " + country + '}';
 			}
 		}
+	}
+
+	public static final List<Dish> menu = Arrays.asList( //
+			new Dish("pork", false, 800, Dish.Type.MEAT), //
+			new Dish("beef", false, 700, Dish.Type.MEAT), //
+			new Dish("chicken", false, 400, Dish.Type.MEAT), //
+			new Dish("french fries", true, 530, Dish.Type.OTHER), //
+			new Dish("rice", true, 350, Dish.Type.OTHER), //
+			new Dish("season fruit", true, 120, Dish.Type.OTHER), //
+			new Dish("pizza", true, 550, Dish.Type.OTHER), //
+			new Dish("prawns", false, 400, Dish.Type.FISH), //
+			new Dish("salmon", false, 450, Dish.Type.FISH) //
+	);
+
+	public static class Dish {
+
+		private final String name;
+		private final boolean vegetarian;
+		private final int calories;
+		private final Type type;
+
+		public Dish(String name, boolean vegetarian, int calories, Type type) {
+			this.name = name;
+			this.vegetarian = vegetarian;
+			this.calories = calories;
+			this.type = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public boolean isVegetarian() {
+			return vegetarian;
+		}
+
+		public int getCalories() {
+			return calories;
+		}
+
+		public Type getType() {
+			return type;
+		}
+
+		public enum Type {
+			MEAT, FISH, OTHER
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
+
 	}
 
 }

@@ -6,7 +6,6 @@
 
 [Java 8 in Action](https://www.manning.com/books/java-8-in-action)
 
-
 [Source code in GitHub](https://github.com/java8/Java8InAction)
 
 [Code Tools: jmh](http://openjdk.java.net/projects/code-tools/jmh/)
@@ -27,4 +26,15 @@ Apache Maven 3.5.2
 ```shell
 mvn eclipse:clean eclipse:eclipse -DdownloadSources=true
 mvn clean package
+```
+
+
+## Site
+```
+# chapter 8
+http://dig.cs.illinois.edu/papers/lambda-Refactoring.pdf
+http://refactoring.info/tools/LambdaFicator/
+
+# chapter 9
+https://blogs.oracle.com/darcy/kinds-of-compatibility:-source,-binary,-and-behavioral
 ```

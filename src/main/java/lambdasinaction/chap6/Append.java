@@ -9,7 +9,6 @@ import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
-import static lambdasinaction.chap6.Dish.menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
